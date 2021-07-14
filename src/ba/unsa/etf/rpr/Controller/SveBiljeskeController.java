@@ -102,5 +102,22 @@ public class SveBiljeskeController {
         jMetro.setScene(scene);
         stage.setScene(scene);
         stage.show();
+        stage.setOnHiding((event) -> {
+            clearFilters(new ActionEvent());
+            biljeskeModel.clearBiljeske();
+            biljeskeModel.sveBiljeske();
+        });
+    }
+
+    public void clearFilters(ActionEvent actionEvent){
+        nameFld.clear();
+        predmetChoiceBox.setValue(null);
+        datePicker.getEditor().clear();
+        favoriteCheckBox.setSelected(false);
+    }
+
+    public void removeBiljeska(ActionEvent actionEvent){
+        biljeskeModel.biljeskaRemove(tableViewBiljeske.getSelectionModel().getSelectedItem());
+        tableViewBiljeske.refresh();
     }
 }
