@@ -4,8 +4,13 @@ import ba.unsa.etf.rpr.Biljeska;
 import ba.unsa.etf.rpr.BiljeskeDAO;
 import ba.unsa.etf.rpr.Korisnik;
 import ba.unsa.etf.rpr.Predmet;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.kernel.pdf.PdfWriter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.io.File;
+import java.io.IOException;
 
 public class BiljeskeModel {
     private static BiljeskeModel instance = null;
@@ -101,5 +106,16 @@ public class BiljeskeModel {
     }
     public void clearPredmeti(){
         predmeti.clear();
+    }
+
+    public void exportFile(File selectedFile, String text) {
+        new Thread(() ->{
+            try {
+                HtmlConverter.convertToPdf(text, new PdfWriter(selectedFile.getAbsolutePath()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
     }
 }
