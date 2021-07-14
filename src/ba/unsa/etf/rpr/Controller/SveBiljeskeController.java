@@ -18,6 +18,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
@@ -201,10 +202,20 @@ public class SveBiljeskeController {
     }
     public void exit(ActionEvent actionEvent){
         Platform.exit();
-//        Node node = (Node)actionEvent.getSource();
-//        ((Stage)node.getScene().getWindow()).close();
     }
-    public void signOut(ActionEvent actionEvent){
-
+    public void signOut(ActionEvent actionEvent) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sample.fxml"), ResourceBundle.getBundle("Translation"));
+        MainController ctrl = new MainController();
+        loader.setController(ctrl);
+        Parent root = loader.load();
+        Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+        JMetro jMetro = new JMetro(Main.getTheme());
+        ((Stage) tableViewBiljeske.getScene().getWindow()).close();
+        jMetro.setScene(scene);
+        stage.setScene(scene);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.setResizable(false);
+        stage.show();
     }
 }
