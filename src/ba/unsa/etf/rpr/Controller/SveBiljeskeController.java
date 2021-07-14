@@ -109,6 +109,10 @@ public class SveBiljeskeController {
         });
     }
 
+    public void addBiljeska(ActionEvent actionEvent) throws IOException {
+        openBiljeska(null);
+    }
+
     public void subjectOpen(ActionEvent actionEvent) throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/subjects.fxml"));
