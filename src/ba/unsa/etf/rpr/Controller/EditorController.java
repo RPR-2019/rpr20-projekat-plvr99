@@ -4,6 +4,9 @@ package ba.unsa.etf.rpr.Controller;
 import ba.unsa.etf.rpr.Biljeska;
 import ba.unsa.etf.rpr.Korisnik;
 import ba.unsa.etf.rpr.Models.BiljeskeModel;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,11 +20,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.web.HTMLEditor;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -115,5 +121,31 @@ public class EditorController {
                 }
             }
         }
+    }
+    public void exportBiljeska(ActionEvent actionEvent) throws IOException {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Browse");
+        Stage stage = new Stage();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File (pdf)", "*.pdf"));
+        File selectedFile = fileChooser.showSaveDialog(stage);
+        System.out.println(selectedFile.getAbsolutePath());
+        System.out.println(selectedFile.getPath());
+        if(selectedFile.exists()  && selectedFile.canWrite()) {
+//            model.zapisiDatoteku(selectedFile);
+            HtmlConverter.convertToPdf(htmlEditor.getHtmlText(), new PdfWriter(selectedFile.getAbsolutePath()));
+
+
+        }
+        else {
+            try {
+                selectedFile.createNewFile();
+//                model.zapisidatoteku(selectedfile);
+                HtmlConverter.convertToPdf(htmlEditor.getHtmlText(), new PdfWriter(selectedFile.getAbsolutePath()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
