@@ -10,17 +10,28 @@ import javafx.stage.StageStyle;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
+import java.util.ResourceBundle;
+
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class Main extends Application {
+    public static Style theme = Style.DARK;
+
+    public static Style getTheme() {
+        return theme;
+    }
+
+    public static void setTheme(Style theme) {
+        Main.theme = theme;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sample.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sample.fxml"), ResourceBundle.getBundle("Translation"));
         loader.setController(new MainController());
         Parent root = loader.load();
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-        JMetro jMetro = new JMetro(Style.LIGHT);
+        JMetro jMetro = new JMetro(Main.getTheme());
         jMetro.setScene(scene);
 
         primaryStage.setScene(scene);
