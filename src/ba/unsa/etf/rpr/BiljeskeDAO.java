@@ -83,8 +83,7 @@ public class BiljeskeDAO {
             PreparedStatement provjera = conn.prepareStatement(
                     "Insert into korisnik(id,username,password,firstName,lastName) " +
                             "values (" + zadnjiIdTabele("korisnik")+1 + ",'" + username + "', '"+password+"', '" + firstName+"', '"+lastName+"');");
-            provjera.setString(1, username);
-            provjera.setString(2, password);
+           provjera.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
