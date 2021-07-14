@@ -109,6 +109,32 @@ public class SveBiljeskeController {
         });
     }
 
+    public void searchBiljeske(ActionEvent actionEvent){
+        loadingCircle.setVisible(true);
+        loadingLabel.setVisible(true);
+        String naziv= nameFld.getText().isBlank() ? null : nameFld.getText();
+        Predmet predmet = predmetChoiceBox.getValue()==null ? null : predmetChoiceBox.getValue();
+        String datum = datePicker.getEditor().getText().isBlank() ? null : datePicker.getEditor().getText();
+        new Thread(()->{
+            if(naziv==null && predmet==null && datum==null){
+                Platform.runLater(()->{
+                    biljeskeModel.clearBiljeske();
+                    biljeskeModel.sveBiljeske();
+                    tableViewBiljeske.setItems(biljeskeModel.getBiljeske());
+                });
+            }
+            else {
+                Platform.runLater(()->{
+                    biljeskeModel.clearBiljeske();
+                    biljeskeModel.filterBiljeske(naziv,predmet,datum,favoriteCheckBox.isSelected());
+                    tableViewBiljeske.setItems(biljeskeModel.getBiljeske());
+                });
+            }
+            loadingCircle.setVisible(false);
+            loadingLabel.setVisible(false);
+        }).start();
+    }
+
     public void clearFilters(ActionEvent actionEvent){
         nameFld.clear();
         predmetChoiceBox.setValue(null);
