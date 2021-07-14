@@ -109,6 +109,21 @@ public class SveBiljeskeController {
         });
     }
 
+    public void subjectOpen(ActionEvent actionEvent) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/subjects.fxml"));
+        PredmetController ctrl = new PredmetController(korisnik);
+        loader.setController(ctrl);
+        Parent root = loader.load();
+        stage.setTitle("Notes");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+        JMetro jMetro = new JMetro(Style.LIGHT);
+        jMetro.setScene(scene);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void searchBiljeske(ActionEvent actionEvent){
         loadingCircle.setVisible(true);
         loadingLabel.setVisible(true);
