@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -22,6 +23,8 @@ import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -89,7 +92,7 @@ public class SveBiljeskeController {
     }
     public void openBiljeska(Biljeska biljeska) throws IOException {
         Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editor.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editor.fxml"), ResourceBundle.getBundle("Translation"));
         EditorController ctrl ;
         if(biljeska == null) ctrl = new EditorController(korisnik);
         else ctrl = new EditorController(korisnik, biljeska);
@@ -98,7 +101,7 @@ public class SveBiljeskeController {
         stage.setTitle("Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-        JMetro jMetro = new JMetro(Style.LIGHT);
+        JMetro jMetro = new JMetro(Main.getTheme());
         jMetro.setScene(scene);
         stage.setScene(scene);
         stage.show();
@@ -115,14 +118,14 @@ public class SveBiljeskeController {
 
     public void subjectOpen(ActionEvent actionEvent) throws IOException {
         Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/subjects.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/subjects.fxml"), ResourceBundle.getBundle("Translation"));
         PredmetController ctrl = new PredmetController(korisnik);
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.setTitle("Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-        JMetro jMetro = new JMetro(Style.LIGHT);
+        JMetro jMetro = new JMetro(Main.getTheme());
         jMetro.setScene(scene);
         stage.setScene(scene);
         stage.show();
@@ -164,5 +167,44 @@ public class SveBiljeskeController {
     public void removeBiljeska(ActionEvent actionEvent){
         biljeskeModel.biljeskaRemove(tableViewBiljeske.getSelectionModel().getSelectedItem());
         tableViewBiljeske.refresh();
+    }
+
+    public void exportBiljeska(ActionEvent actionEvent) throws IOException {
+        new EditorController(korisnik,tableViewBiljeske.getSelectionModel().getSelectedItem()).exportBiljeska(actionEvent);
+    }
+
+    public void languageChange(ActionEvent actionEvent){
+        MenuItem item = (MenuItem)actionEvent.getSource();
+        String language = item.getText();
+        promjenaJezika(language);
+    }
+    private void promjenaJezika(String jezik){
+        biljeskeModel.clearBiljeske();
+        biljeskeModel.clearPredmeti();
+        Stage stage = (Stage) tableViewBiljeske.getScene().getWindow();
+        switch (jezik) {
+            case "Bosanski" -> Locale.setDefault(new Locale("bs", "BA"));
+            case "English" -> Locale.setDefault(new Locale("en", "US"));
+            default -> Locale.setDefault(new Locale("bs", "BA"));
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sveBiljeske.fxml"), ResourceBundle.getBundle("Translation"));
+        loader.setController(new SveBiljeskeController(korisnik));
+        try {
+            Scene scene = new Scene(loader.load());
+            JMetro jMetro = new JMetro(Main.getTheme());
+            jMetro.setScene(scene);
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void exit(ActionEvent actionEvent){
+        Platform.exit();
+//        Node node = (Node)actionEvent.getSource();
+//        ((Stage)node.getScene().getWindow()).close();
+    }
+    public void signOut(ActionEvent actionEvent){
+
     }
 }
