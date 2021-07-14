@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -17,9 +19,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 import java.io.IOException;
+import java.util.Optional;
+
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class EditorController {
@@ -59,6 +64,9 @@ public class EditorController {
                 System.out.println(htmlEditor.getHtmlText());
             }
         });
+        Platform.runLater(()->{
+            gridPane.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
+        });
     }
 
     public void saveBiljeska(ActionEvent actionEvent) throws IOException {
@@ -81,5 +89,31 @@ public class EditorController {
         stage.setScene(scene);
         stage.show();
         // TODO: 12.7.2021 on hiding check jel saveano ako jeste update pocetni text
+    }
+    private void closeWindowEvent(WindowEvent event){
+        System.out.println("Window close request ...");
+
+        if(!pocetniText.equals(htmlEditor.getHtmlText())) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.getButtonTypes().remove(ButtonType.OK);
+            alert.getButtonTypes().add(ButtonType.CANCEL);
+            alert.getButtonTypes().add(ButtonType.YES);
+            alert.setTitle("Quit application");
+            alert.setContentText(String.format("Close without saving?"));
+            Optional<ButtonType> res = alert.showAndWait();
+            if(res.isPresent()) {
+                if(res.get().equals(ButtonType.CANCEL))
+                    event.consume();
+                    // TODO: 13.7.2021 nema logike popraviti
+                else if(res.get().equals(ButtonType.YES)){
+                    try {
+                        saveBiljeska(new ActionEvent());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    event.consume();
+                }
+            }
+        }
     }
 }
