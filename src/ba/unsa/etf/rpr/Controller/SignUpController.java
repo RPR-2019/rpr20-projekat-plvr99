@@ -4,11 +4,12 @@ import ba.unsa.etf.rpr.Models.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class SignUpController {
     public TextField nameFld;
@@ -47,6 +48,16 @@ public class SignUpController {
         }
         else{
             model.korisnikInsert(usernameFld.getText(), passwordFld.getText(), nameFld.getText(), lastNameFld.getText());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("Translation");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(resourceBundle.getString("signUpSuccess"));
+            alert.setHeaderText(null);
+            alert.setContentText(resourceBundle.getString("signUpSuccess1"));
+            Optional<ButtonType> res = alert.showAndWait();
+            if (res.get() == ButtonType.OK){
+                actionEvent.consume();
+                cancel(actionEvent);
+            }
         }
 
     }

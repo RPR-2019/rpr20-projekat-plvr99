@@ -20,6 +20,7 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -46,14 +47,14 @@ public class MainController {
             usernameFld.setStyle("");
             passwordFld.setStyle("");
             Stage stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sveBiljeske.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sveBiljeske.fxml"), ResourceBundle.getBundle("Translation"));
             SveBiljeskeController ctrl = new SveBiljeskeController(model.getkorisnik(usernameFld.getText()));
             loader.setController(ctrl);
             Parent root = loader.load();
             stage.setTitle("Notes");
            // stage.initModality(Modality.APPLICATION_MODAL);
             Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-            JMetro jMetro = new JMetro(Style.LIGHT);
+            JMetro jMetro = new JMetro(Main.getTheme());
             jMetro.setScene(scene);
             stage.setScene(scene);
             stage.show();
@@ -72,14 +73,14 @@ public class MainController {
 
     public void signUpAccount(ActionEvent actionEvent) throws IOException {
         Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/signUp.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/signUp.fxml"), ResourceBundle.getBundle("Translation"));
         SignUpController ctrl = new SignUpController();
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.setTitle("Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-        JMetro jMetro = new JMetro(Style.LIGHT);
+        JMetro jMetro = new JMetro(Main.getTheme());
         jMetro.setScene(scene);
         stage.setScene(scene);
         stage.show();

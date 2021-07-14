@@ -99,4 +99,7 @@ public class BiljeskeModel {
     public void clearBiljeske() {
         biljeske.clear();
     }
+    public void clearPredmeti(){
+        predmeti.clear();
+    }
 }

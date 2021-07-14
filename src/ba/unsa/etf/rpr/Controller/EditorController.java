@@ -3,6 +3,7 @@ package ba.unsa.etf.rpr.Controller;
 
 import ba.unsa.etf.rpr.Biljeska;
 import ba.unsa.etf.rpr.Korisnik;
+import ba.unsa.etf.rpr.Main;
 import ba.unsa.etf.rpr.Models.BiljeskeModel;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -11,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -30,6 +32,7 @@ import jfxtras.styles.jmetro.Style;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -83,14 +86,14 @@ public class EditorController {
 
     public void saveAsBiljeska(ActionEvent actionEvent) throws IOException {
         Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/saveBiljeska.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/saveBiljeska.fxml"), ResourceBundle.getBundle("Translation"));
         SaveBiljeskaController ctrl = new SaveBiljeskaController(korisnik, htmlEditor.getHtmlText());
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.setTitle("Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-        JMetro jMetro = new JMetro(Style.LIGHT);
+        JMetro jMetro = new JMetro(Main.getTheme());
         jMetro.setScene(scene);
         stage.setScene(scene);
         stage.show();
@@ -146,6 +149,10 @@ public class EditorController {
                 e.printStackTrace();
             }
         }
+    }
 
+    public void close(ActionEvent actionEvent){
+        Node node = (Node)actionEvent.getSource();
+        ((Stage)node.getScene().getWindow()).close();
     }
 }
