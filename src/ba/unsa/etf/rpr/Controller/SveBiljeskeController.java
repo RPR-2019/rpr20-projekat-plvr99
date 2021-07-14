@@ -73,7 +73,19 @@ public class SveBiljeskeController {
                             });
                     return checkBox.selectedProperty();
                 });
-
+        tableViewBiljeske.setRowFactory(tw->{
+            TableRow<Biljeska> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    try {
+                        openBiljeska(row.getItem());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            return row;
+        });
     }
     public void openBiljeska(Biljeska biljeska) throws IOException {
         Stage stage = new Stage();
