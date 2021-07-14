@@ -30,21 +30,21 @@
   </rowConstraints>
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%username" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       <Button fx:id="loginBtn" defaultButton="true" mnemonicParsing="false" onAction="#login" prefHeight="37.0" prefWidth="395.0" text="Log-in" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </Button>
-      <Hyperlink fx:id="signUpHyper" onAction="#signUpAccount" text="Don't have account? Sign-up" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
-      <Button fx:id="exitBtn" cancelButton="true" mnemonicParsing="false" onAction="#closeApp" prefHeight="37.0" prefWidth="395.0" text="Exit" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7">
+      <Hyperlink fx:id="signUpHyper" onAction="#signUpAccount" text="%signUp" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
+      <Button fx:id="exitBtn" cancelButton="true" mnemonicParsing="false" onAction="#closeApp" prefHeight="37.0" prefWidth="395.0" text="%exit" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </Button>
       <TextField fx:id="usernameFld" GridPane.columnIndex="2" GridPane.rowIndex="2" />
       <PasswordField fx:id="passwordFld" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-      <Label fx:id="errorLabel" alignment="CENTER" text="Wrong username or password" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
+      <Label fx:id="errorLabel" alignment="CENTER" text="%wrong" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
    </children>
 </GridPane>

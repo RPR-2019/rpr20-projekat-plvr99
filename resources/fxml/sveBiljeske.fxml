@@ -9,6 +9,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -26,14 +27,33 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem mnemonicParsing="false" onAction="#addBiljeska" text="Add..." />
+                  <MenuItem mnemonicParsing="false" onAction="#exportBiljeska" text="Export as PDF..." />
+                  <MenuItem mnemonicParsing="false" onAction="#signOut" text="SignOut" />
+              <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" onAction="#removeBiljeska" text="Remove" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="View">
+               <items>
+                  <Menu mnemonicParsing="false" text="Language">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#languageChange" text="English" />
+                        <MenuItem mnemonicParsing="false" onAction="#languageChange" text="Bosanski" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Theme">
+                     <items>
+                        <RadioMenuItem mnemonicParsing="false" text="Light" />
+                        <RadioMenuItem mnemonicParsing="false" text="Dark" />
+                     </items>
+                  </Menu>
+               </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="About" />
@@ -45,7 +65,7 @@
    <bottom>
       <HBox prefHeight="18.0" prefWidth="733.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="loadingLabel" text="Loading" />
+            <Label fx:id="loadingLabel" text="%loading" />
             <ProgressIndicator fx:id="loadingCircle" prefHeight="15.0" prefWidth="29.0" />
          </children>
       </HBox>
@@ -53,10 +73,10 @@
    <center>
       <TableView fx:id="tableViewBiljeske" prefHeight="434.0" prefWidth="702.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="colNaziv" prefWidth="75.0" text="Name" />
-          <TableColumn fx:id="colDateCreated" prefWidth="75.0" text="Date Created" />
-            <TableColumn fx:id="colLastModified" prefWidth="75.0" text="Last Modified" />
-            <TableColumn fx:id="colFavorite" prefWidth="75.0" text="Favourite" />
+          <TableColumn fx:id="colNaziv" prefWidth="75.0" text="%name" />
+          <TableColumn fx:id="colDateCreated" prefWidth="75.0" text="%dateCreated" />
+            <TableColumn fx:id="colLastModified" prefWidth="75.0" text="%lastModified" />
+            <TableColumn fx:id="colFavorite" prefWidth="75.0" text="%favorite" />
         </columns>
       </TableView>
    </center>
@@ -78,27 +98,27 @@
             <RowConstraints maxHeight="398.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Filters:" GridPane.columnSpan="2" />
+            <Label text="%filters" GridPane.columnSpan="2" />
             <TextField fx:id="nameFld" prefHeight="25.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
-            <Label text="Subject:" GridPane.rowIndex="2" />
-            <Label text="Date:" GridPane.rowIndex="3" />
+            <Label text="%subject" GridPane.rowIndex="2" />
+            <Label text="%dateCreated" GridPane.rowIndex="3" />
             <DatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="196.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
-            <Label text="Name:" GridPane.rowIndex="1" />
+            <Label text="%name" GridPane.rowIndex="1" />
             <ChoiceBox fx:id="predmetChoiceBox" prefHeight="25.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
-            <Label text="Favorite:" GridPane.rowIndex="4" />
+            <Label text="%favorite" GridPane.rowIndex="4" />
             <CheckBox fx:id="favoriteCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="5" />
-            <Button fx:id="searchBtn" mnemonicParsing="false" onAction="#searchBiljeske" text="Search" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-            <Button fx:id="clearBtn" mnemonicParsing="false" onAction="#clearFilters" text="Clear filters" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+            <Button fx:id="searchBtn" mnemonicParsing="false" onAction="#searchBiljeske" text="%search" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+            <Button fx:id="clearBtn" mnemonicParsing="false" onAction="#clearFilters" text="%clrFilters" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
          </children>
       </GridPane>
    </left>
    <right>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#addBiljeska" text="Add" />
-            <Button fx:id="removeBtn" mnemonicParsing="false" onAction="#removeBiljeska" text="Remove" />
-            <Button fx:id="subjectBtn" mnemonicParsing="false" onAction="#subjectOpen" text="Add Subject" />
+            <Button mnemonicParsing="false" onAction="#addBiljeska" text="%add" />
+            <Button fx:id="removeBtn" mnemonicParsing="false" onAction="#removeBiljeska" text="%remove" />
+            <Button fx:id="subjectBtn" mnemonicParsing="false" onAction="#subjectOpen" text="%addSubject" />
          </children>
       </VBox>
    </right>

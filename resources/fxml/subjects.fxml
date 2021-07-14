@@ -20,12 +20,12 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="Name" />
+      <Label text="%name" />
       <TextField fx:id="nameFld" GridPane.columnIndex="1" />
       <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
         <buttons>
-          <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addPredmet" text="Add" />
-            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#close" text="Cancel" />
+          <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addPredmet" text="%add" />
+            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#close" text="%cancel" />
         </buttons>
       </ButtonBar>
       <Text fx:id="messageText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />

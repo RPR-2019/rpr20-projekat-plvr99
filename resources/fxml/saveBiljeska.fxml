@@ -20,14 +20,14 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="Save as:" />
-      <Label text="Subject:" GridPane.rowIndex="1" />
+      <Label text="%saveAs" />
+      <Label text="%subject" GridPane.rowIndex="1" />
       <TextField fx:id="nameFld" GridPane.columnIndex="1" />
       <ChoiceBox fx:id="predmetChoiceBox" prefHeight="25.0" prefWidth="192.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <ButtonBar prefHeight="40.0" prefWidth="363.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
         <buttons>
-          <Button fx:id="saveBtn" defaultButton="true" mnemonicParsing="false" onAction="#saveBiljeska" text="Save" />
-            <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#close" text="Cancel" />
+          <Button fx:id="saveBtn" defaultButton="true" mnemonicParsing="false" onAction="#saveBiljeska" text="%save" />
+            <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#close" text="%cancel" />
         </buttons>
       </ButtonBar>
    </children>
