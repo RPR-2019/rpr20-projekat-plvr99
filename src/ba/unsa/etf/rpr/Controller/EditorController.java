@@ -12,7 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.MouseButton;
@@ -23,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import jfxtras.styles.jmetro.FlatAlert;
 import jfxtras.styles.jmetro.JMetro;
 
 import java.io.File;
@@ -98,25 +99,32 @@ public class EditorController {
         System.out.println("Window close request ...");
 
         if(!pocetniText.equals(htmlEditor.getHtmlText())) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.getButtonTypes().remove(ButtonType.OK);
-            alert.getButtonTypes().add(ButtonType.CANCEL);
-            alert.getButtonTypes().add(ButtonType.YES);
-            alert.setTitle("Quit application");
-            alert.setContentText(String.format("Close without saving?"));
-            Optional<ButtonType> res = alert.showAndWait();
-            if(res.isPresent()) {
-                if(res.get().equals(ButtonType.CANCEL))
-                    event.consume();
-                    // TODO: 13.7.2021 nema logike popraviti
-                else if(res.get().equals(ButtonType.YES)){
-                    try {
-                        saveBiljeska(new ActionEvent());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    event.consume();
+            JMetro jMetro = new JMetro(Main.getTheme());
+            FlatAlert alert = new FlatAlert(FlatAlert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation Dialog with Custom Actions");
+            alert.setHeaderText("Look, a Confirmation Dialog with Custom Actions");
+            alert.setContentText("Choose your option.");
+            // TODO: 16.7.2021 dodati translations text
+            ButtonType buttonTypeOne = new ButtonType("Save");
+            ButtonType buttonTypeTwo = new ButtonType("Don't Save");
+            ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+            jMetro.setScene(alert.getDialogPane().getScene());
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOne){
+                try {
+                    saveBiljeska(new ActionEvent());
+                    close(new ActionEvent());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+            } else if (result.get() == buttonTypeTwo) {
+                event.consume();
+                close(new ActionEvent());
+            } else {
+                event.consume();
             }
         }
     }
