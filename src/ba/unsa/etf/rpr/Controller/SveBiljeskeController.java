@@ -7,20 +7,25 @@ import ba.unsa.etf.rpr.Main;
 import ba.unsa.etf.rpr.Models.BiljeskeModel;
 import ba.unsa.etf.rpr.Predmet;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
 
 import java.io.IOException;
@@ -40,9 +45,12 @@ public class SveBiljeskeController {
     public ChoiceBox<Predmet> predmetChoiceBox;
     public DatePicker datePicker;
     public Label loadingLabel;
-    public ProgressIndicator loadingCircle;
     public CheckBox favoriteCheckBox;
-
+    public GridPane grid;
+    public VBox vBox;
+    public HBox hBox;
+    public BorderPane borderPane;
+    public MenuItem menuRemove;
     private static BiljeskeModel biljeskeModel;
 
     public SveBiljeskeController(Korisnik korisnik) {
@@ -52,12 +60,16 @@ public class SveBiljeskeController {
 
     @FXML
     public void initialize(){
-        loadingLabel.setVisible(false);
-        loadingCircle.setVisible(false);
+        borderPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        grid.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        vBox.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        hBox.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 
         biljeskeModel.napuniModelPodacima();
+        ObservableList<Biljeska> biljeske= biljeskeModel.getBiljeske();
         predmetChoiceBox.setItems(biljeskeModel.getPredmeti());
-        tableViewBiljeske.setItems(biljeskeModel.getBiljeske());
+        tableViewBiljeske.setItems(biljeske);
+        loadingLabel.textProperty().bind(Bindings.size(biljeske).asString());
         tableViewBiljeske.setEditable(true);
         colNaziv.setCellValueFactory(new PropertyValueFactory<>("naziv"));
         colDateCreated.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
@@ -90,6 +102,10 @@ public class SveBiljeskeController {
             });
             return row;
         });
+        menuRemove.setDisable(true);
+        tableViewBiljeske.getSelectionModel().selectedItemProperty().addListener(((observableValue, biljeska, t1) -> {
+            menuRemove.setDisable(t1 == null);
+        }));
     }
     public void openBiljeska(Biljeska biljeska) throws IOException {
         Stage stage = new Stage();
@@ -133,8 +149,6 @@ public class SveBiljeskeController {
     }
 
     public void searchBiljeske(ActionEvent actionEvent){
-        loadingCircle.setVisible(true);
-        loadingLabel.setVisible(true);
         String naziv= nameFld.getText().isBlank() ? null : nameFld.getText();
         Predmet predmet = predmetChoiceBox.getValue()==null ? null : predmetChoiceBox.getValue();
         String datum = datePicker.getEditor().getText().isBlank() ? null : datePicker.getEditor().getText();
@@ -153,8 +167,6 @@ public class SveBiljeskeController {
                     tableViewBiljeske.setItems(biljeskeModel.getBiljeske());
                 });
             }
-            loadingCircle.setVisible(false);
-            loadingLabel.setVisible(false);
         }).start();
     }
 
@@ -177,15 +189,30 @@ public class SveBiljeskeController {
     public void languageChange(ActionEvent actionEvent){
         MenuItem item = (MenuItem)actionEvent.getSource();
         String language = item.getText();
-        promjenaJezika(language);
+        promjenaJezikaIliTeme(language);
     }
-    private void promjenaJezika(String jezik){
+
+    public void themeChange(ActionEvent actionEvent) {
+        MenuItem item = (MenuItem) actionEvent.getSource();
+        String theme = item.getText();
+        if (theme.equals("Light") && Main.getTheme().equals(Style.LIGHT)) return;
+        if (theme.equals("Dark") && Main.getTheme().equals(Style.DARK)) return;
+        promjenaJezikaIliTeme(theme);
+    }
+
+    private void promjenaJezikaIliTeme(String promjena){
         biljeskeModel.clearBiljeske();
         biljeskeModel.clearPredmeti();
         Stage stage = (Stage) tableViewBiljeske.getScene().getWindow();
-        switch (jezik) {
+        switch (promjena) {
             case "Bosanski" -> Locale.setDefault(new Locale("bs", "BA"));
             case "English" -> Locale.setDefault(new Locale("en", "US"));
+            case "Light" -> {
+                Main.setTheme(Style.LIGHT);
+            }
+            case "Dark" -> {
+                Main.setTheme(Style.DARK);
+            }
             default -> Locale.setDefault(new Locale("bs", "BA"));
         }
 
@@ -193,6 +220,14 @@ public class SveBiljeskeController {
         loader.setController(new SveBiljeskeController(korisnik));
         try {
             Scene scene = new Scene(loader.load());
+            scene.getStylesheets().clear();
+            if (Main.getTheme().equals(Style.DARK)) {
+                scene.getStylesheets().
+                        add(getClass().getResource("/css/iconsWhite.css").toExternalForm());
+            } else {
+                scene.getStylesheets().
+                        add(getClass().getResource("/css/iconsBlack.css").toExternalForm());
+            }
             JMetro jMetro = new JMetro(Main.getTheme());
             jMetro.setScene(scene);
             stage.setScene(scene);
@@ -200,6 +235,7 @@ public class SveBiljeskeController {
             e.printStackTrace();
         }
     }
+
     public void exit(ActionEvent actionEvent){
         Platform.exit();
     }
