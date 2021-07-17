@@ -34,6 +34,7 @@ public class MainController {
     public void initialize() {
         errorLabel.setVisible(false);
         grid.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+
     }
 
     public void closeApp(ActionEvent actionEvent){
@@ -50,11 +51,20 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sveBiljeske.fxml"), ResourceBundle.getBundle("Translation"));
             SveBiljeskeController ctrl = new SveBiljeskeController(model.getkorisnik(usernameFld.getText()));
             loader.setController(ctrl);
+
             Parent root = loader.load();
             stage.setTitle("Notes");
            // stage.initModality(Modality.APPLICATION_MODAL);
             Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
             JMetro jMetro = new JMetro(Main.getTheme());
+            scene.getStylesheets().clear();
+            if (Main.getTheme().equals(Style.DARK)) {
+                scene.getStylesheets().
+                        add(getClass().getResource("/css/iconsWhite.css").toExternalForm());
+            } else {
+                scene.getStylesheets().
+                        add(getClass().getResource("/css/iconsBlack.css").toExternalForm());
+            }
             jMetro.setScene(scene);
             stage.setScene(scene);
             stage.show();
