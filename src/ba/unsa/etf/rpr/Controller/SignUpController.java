@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -25,30 +26,30 @@ public class SignUpController {
     }
 
     public void signUpAccount(ActionEvent actionEvent){
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("Translation", Locale.getDefault());
         if(nameFld.getText().isBlank() || lastNameFld.getText().isBlank() || usernameFld.getText().isBlank()
             || passwordFld.getText().isBlank() || passwordFld2.getText().isBlank()){
-            messageLabel.setText("One or more fields is left blank. Please fill them up");
+            messageLabel.setText(resourceBundle.getString("signUpMessage1"));
             messageLabel.setTextFill(Paint.valueOf("red"));
             messageLabel.setVisible(true);
         }
         else if(model.usernameCheck(usernameFld.getText())){
-            messageLabel.setText("Username taken, please choose another username");
+            messageLabel.setText(resourceBundle.getString("signUpMessage2"));
             messageLabel.setTextFill(Paint.valueOf("red"));
             messageLabel.setVisible(true);
         }
         else if (!passwordFld.getText().equals(passwordFld2.getText())){
-            messageLabel.setText("Passwords don't match");
+            messageLabel.setText(resourceBundle.getString("signUpMessage3"));
             messageLabel.setTextFill(Paint.valueOf("red"));
             messageLabel.setVisible(true);
         }
         else if(!passwordStrengthCheck(passwordFld.getText())){
-            messageLabel.setText("Passwords should contain between 8 and 16 characters and have at least one digit, one special sign and one upercase character");
+            messageLabel.setText(resourceBundle.getString("signUpMessage4"));
             messageLabel.setTextFill(Paint.valueOf("red"));
             messageLabel.setVisible(true);
         }
         else{
             model.korisnikInsert(usernameFld.getText(), passwordFld.getText(), nameFld.getText(), lastNameFld.getText());
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("Translation");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(resourceBundle.getString("signUpSuccess"));
             alert.setHeaderText(null);
@@ -59,7 +60,6 @@ public class SignUpController {
                 cancel(actionEvent);
             }
         }
-
     }
     public void cancel(ActionEvent actionEvent){
         Node node = (Node)actionEvent.getSource();
