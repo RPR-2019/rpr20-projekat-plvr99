@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.MouseButton;
@@ -28,6 +27,7 @@ import jfxtras.styles.jmetro.JMetro;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -96,18 +96,16 @@ public class EditorController {
         stage.show();
     }
     private void closeWindowEvent(WindowEvent event){
-        System.out.println("Window close request ...");
-
         if(!pocetniText.equals(htmlEditor.getHtmlText())) {
             JMetro jMetro = new JMetro(Main.getTheme());
             FlatAlert alert = new FlatAlert(FlatAlert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation Dialog with Custom Actions");
-            alert.setHeaderText("Look, a Confirmation Dialog with Custom Actions");
-            alert.setContentText("Choose your option.");
-            // TODO: 16.7.2021 dodati translations text
-            ButtonType buttonTypeOne = new ButtonType("Save");
-            ButtonType buttonTypeTwo = new ButtonType("Don't Save");
-            ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
+            alert.setTitle(rb.getString("closeWSaving"));
+            alert.setHeaderText(rb.getString("closeWSaving1"));
+            alert.setContentText(null);
+            ButtonType buttonTypeOne = new ButtonType(rb.getString("save"));
+            ButtonType buttonTypeTwo = new ButtonType(rb.getString("dontSaven"));
+            ButtonType buttonTypeCancel = new ButtonType(rb.getString("cancel"));
 
             alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
             jMetro.setScene(alert.getDialogPane().getScene());
@@ -128,12 +126,12 @@ public class EditorController {
             }
         }
     }
-    public void exportBiljeska(ActionEvent actionEvent) throws IOException {
 
+    public void exportBiljeska(ActionEvent actionEvent) throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Browse");
         Stage stage = new Stage();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File (pdf)", "*.pdf"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File ", "*.pdf"));
         File selectedFile = fileChooser.showSaveDialog(stage);
         String text = htmlEditor == null ? pocetniText : htmlEditor.getHtmlText();
         if(selectedFile.exists()  && selectedFile.canWrite()) {
