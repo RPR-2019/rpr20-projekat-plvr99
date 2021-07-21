@@ -51,6 +51,7 @@ public class SveBiljeskeController {
     public HBox hBox;
     public BorderPane borderPane;
     public MenuItem menuRemove;
+    public Button removeBtn;
     private static BiljeskeModel biljeskeModel;
 
     public SveBiljeskeController(Korisnik korisnik) {
@@ -102,9 +103,12 @@ public class SveBiljeskeController {
             });
             return row;
         });
+
         menuRemove.setDisable(true);
-        tableViewBiljeske.getSelectionModel().selectedItemProperty().addListener(((observableValue, biljeska, t1) -> {
-            menuRemove.setDisable(t1 == null);
+        removeBtn.setDisable(true);
+        tableViewBiljeske.getSelectionModel().selectedItemProperty().addListener(((observableValue, biljeska, selection) -> {
+            menuRemove.setDisable(selection == null);
+            removeBtn.setDisable(selection == null);
         }));
     }
     public void openBiljeska(Biljeska biljeska) throws IOException {
