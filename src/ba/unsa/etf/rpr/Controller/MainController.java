@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
@@ -53,6 +54,7 @@ public class MainController {
             loader.setController(ctrl);
 
             Parent root = loader.load();
+            stage.getIcons().add(new Image("/images/app_icon.png"));
             stage.setTitle("Notes");
            // stage.initModality(Modality.APPLICATION_MODAL);
             Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
@@ -87,6 +89,7 @@ public class MainController {
         SignUpController ctrl = new SignUpController();
         loader.setController(ctrl);
         Parent root = loader.load();
+        stage.getIcons().add(new Image("/images/app_icon.png"));
         stage.setTitle("Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);

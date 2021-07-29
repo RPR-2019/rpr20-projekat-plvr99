@@ -17,13 +17,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
@@ -119,6 +119,7 @@ public class SveBiljeskeController {
         else ctrl = new EditorController(korisnik, biljeska);
         loader.setController(ctrl);
         Parent root = loader.load();
+        stage.getIcons().add(new Image("/images/app_icon.png"));
         stage.setTitle("Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
@@ -143,6 +144,7 @@ public class SveBiljeskeController {
         PredmetController ctrl = new PredmetController(korisnik);
         loader.setController(ctrl);
         Parent root = loader.load();
+        stage.getIcons().add(new Image("/images/app_icon.png"));
         stage.setTitle("Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
@@ -208,6 +210,7 @@ public class SveBiljeskeController {
         biljeskeModel.clearBiljeske();
         biljeskeModel.clearPredmeti();
         Stage stage = (Stage) tableViewBiljeske.getScene().getWindow();
+        stage.getIcons().add(new Image("/images/app_icon.png"));
         switch (promjena) {
             case "Bosanski" -> Locale.setDefault(new Locale("bs", "BA"));
             case "English" -> Locale.setDefault(new Locale("en", "US"));
@@ -254,7 +257,24 @@ public class SveBiljeskeController {
         ((Stage) tableViewBiljeske.getScene().getWindow()).close();
         jMetro.setScene(scene);
         stage.setScene(scene);
-        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.getIcons().add(new Image("/images/app_icon.png"));
+        //stage.initStyle(StageStyle.TRANSPARENT);
+        stage.setResizable(false);
+        stage.show();
+    }
+    public void openAbout(ActionEvent actionEvent) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/about.fxml"), ResourceBundle.getBundle("Translation"));
+        AboutController ctrl = new AboutController();
+        loader.setController(ctrl);
+        Parent root = loader.load();
+        Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+        JMetro jMetro = new JMetro(Main.getTheme());
+        jMetro.setScene(scene);
+        stage.setScene(scene);
+        stage.getIcons().add(new Image("/images/app_icon.png"));
+        stage.setTitle("Notes");
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.show();
     }
