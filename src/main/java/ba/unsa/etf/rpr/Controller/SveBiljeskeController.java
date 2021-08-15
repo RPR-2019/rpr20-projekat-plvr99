@@ -107,6 +107,7 @@ public class SveBiljeskeController {
         menuRemove.setDisable(true);
         removeBtn.setDisable(true);
         tableViewBiljeske.getSelectionModel().selectedItemProperty().addListener(((observableValue, biljeska, selection) -> {
+            // TODO: 30.7.2021 isto i za export menu
             menuRemove.setDisable(selection == null);
             removeBtn.setDisable(selection == null);
         }));
@@ -159,7 +160,7 @@ public class SveBiljeskeController {
         Predmet predmet = predmetChoiceBox.getValue()==null ? null : predmetChoiceBox.getValue();
         String datum = datePicker.getEditor().getText().isBlank() ? null : datePicker.getEditor().getText();
         new Thread(()->{
-            if(naziv==null && predmet==null && datum==null){
+            if(naziv==null && predmet==null && datum==null && !favoriteCheckBox.isSelected()){
                 Platform.runLater(()->{
                     biljeskeModel.clearBiljeske();
                     biljeskeModel.sveBiljeske();

@@ -89,7 +89,6 @@ public class BiljeskeModel {
             if (datum.charAt(1) == '.') datum = "0" + datum;
             if (datum.charAt(4) == '.') datum = datum.substring(0, 3) + "0" + datum.substring(3);
             datum = datum.substring(0,6) + datum.substring(8,10);
-            System.out.println();
         }
         biljeske.addAll( dao.filterBiljeske(naziv, predmet, datum, selected, korisnik) );
     }
@@ -111,7 +110,7 @@ public class BiljeskeModel {
     public void exportFile(File selectedFile, String text) {
         new Thread(() ->{
             try {
-                HtmlConverter.convertToPdf(text, new PdfWriter(selectedFile.getAbsolutePath()));
+               HtmlConverter.convertToPdf(text, new PdfWriter(selectedFile.getAbsolutePath()));
             } catch (IOException e) {
                 e.printStackTrace();
             }

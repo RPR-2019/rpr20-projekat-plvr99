@@ -78,7 +78,6 @@ public class BiljeskeDAO {
     }
 
     public void korisnikInsert(String username, String password, String firstName, String lastName){
-        // TODO: 3.7.2021 Uraditi provjeru prije inserta
         try {
             PreparedStatement provjera = conn.prepareStatement(
                     "Insert into korisnik(id,username,password,firstName,lastName) " +

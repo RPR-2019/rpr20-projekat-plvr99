@@ -118,7 +118,7 @@ public class EditorController {
             alert.setHeaderText(rb.getString("closeWSaving1"));
             alert.setContentText(null);
             ButtonType buttonTypeOne = new ButtonType(rb.getString("save"));
-            ButtonType buttonTypeTwo = new ButtonType(rb.getString("dontSaven"));
+            ButtonType buttonTypeTwo = new ButtonType(rb.getString("dontSave"));
             ButtonType buttonTypeCancel = new ButtonType(rb.getString("cancel"));
 
             alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
@@ -168,8 +168,8 @@ public class EditorController {
     private void createCustomButtons() {
         //add embed file button
         ImageView graphic = new ImageView(new Image(
-                getClass().getResourceAsStream("/images/add_black_24dp.png")));
-        mImportFileButton = new Button("Import File", graphic);
+                getClass().getResourceAsStream("/images/add_grey_24dp.png")));
+        mImportFileButton = new Button("",graphic);
         mImportFileButton.setTooltip(new Tooltip("Import File"));
         mImportFileButton.setOnAction((event) -> onImportFileButtonAction());
 
@@ -200,7 +200,7 @@ public class EditorController {
             byte[] data = Files.readAllBytes(file.toPath());
             String base64data = java.util.Base64.getEncoder().encodeToString(data);
             String htmlData = String.format(
-                    "<embed src='data:%s;base64,%s' type='%s' />",
+                    "<img src='data:%s;base64,%s' type='%s' />",
                     type, base64data, type);
             //insert html
             insertHtmlAfterCursor(htmlData);
