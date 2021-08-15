@@ -29,6 +29,8 @@ public class BiljeskeModel {
         return instance;
     }
     public void napuniModelPodacima(){
+        predmeti.clear();
+        biljeske.clear();
         sviPredmeti();
         sveBiljeske();
     }
