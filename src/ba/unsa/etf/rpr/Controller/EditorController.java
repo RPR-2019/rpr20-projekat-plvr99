@@ -6,19 +6,20 @@ import ba.unsa.etf.rpr.Korisnik;
 import ba.unsa.etf.rpr.Main;
 import ba.unsa.etf.rpr.Models.BiljeskeModel;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -28,6 +29,7 @@ import jfxtras.styles.jmetro.JMetro;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -41,6 +43,7 @@ public class EditorController {
     private static BiljeskeModel biljeskeModel;
     private Korisnik korisnik;
     private String pocetniText;
+    private Button mImportFileButton;
 
     public EditorController(Korisnik korisnik,Biljeska biljeska) {
         this.biljeska = biljeska;
@@ -57,10 +60,19 @@ public class EditorController {
 
     @FXML
     public void initialize(){
-        ((ToolBar) htmlEditor.lookup(".bottom-toolbar")).getItems().addAll(
-                FXCollections.observableArrayList(((ToolBar)htmlEditor.lookup(".top-toolbar")).getItems()));
-        htmlEditor.lookup(".top-toolbar").setDisable(true);
-        htmlEditor.lookup(".top-toolbar").setManaged(false);
+//        ((ToolBar) htmlEditor.lookup(".bottom-toolbar")).getItems().addAll(
+//                FXCollections.observableArrayList(((ToolBar)htmlEditor.lookup(".top-toolbar")).getItems()));
+//        htmlEditor.lookup(".top-toolbar").setDisable(true);
+//        htmlEditor.lookup(".top-toolbar").setManaged(false);
+
+        htmlEditor.setVisible(false);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                createCustomButtons();
+                htmlEditor.setVisible(true);
+            }
+        });
 
         if(biljeska != null){
             htmlEditor.setHtmlText(biljeska.getText());
@@ -151,5 +163,91 @@ public class EditorController {
 
     public void close(ActionEvent actionEvent){
         ((Stage)htmlEditor.getScene().getWindow()).close();
+    }
+
+    private void createCustomButtons() {
+        //add embed file button
+        ImageView graphic = new ImageView(new Image(
+                getClass().getResourceAsStream("/images/add_black_24dp.png")));
+        mImportFileButton = new Button("Import File", graphic);
+        mImportFileButton.setTooltip(new Tooltip("Import File"));
+        mImportFileButton.setOnAction((event) -> onImportFileButtonAction());
+
+        //add to top toolbar
+        ((ToolBar) htmlEditor.lookup(".bottom-toolbar")).getItems().add(mImportFileButton);
+        ((ToolBar) htmlEditor.lookup(".bottom-toolbar")).getItems().add(new Separator(Orientation.VERTICAL));
+    }
+
+    private void onImportFileButtonAction() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select a file to import");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showOpenDialog(htmlEditor.getScene().getWindow());
+        if (selectedFile != null) {
+            importDataFile(selectedFile);
+        }
+    }
+
+    private void importDataFile(File file) {
+        try {
+            //check if file is too big
+            if (file.length() > 1024 * 1024) {
+                throw new VerifyError("File is too big.");
+            }
+            //get mime type of the file
+            String type = Files.probeContentType(file.toPath());
+            //get html content
+            byte[] data = Files.readAllBytes(file.toPath());
+            String base64data = java.util.Base64.getEncoder().encodeToString(data);
+            String htmlData = String.format(
+                    "<embed src='data:%s;base64,%s' type='%s' />",
+                    type, base64data, type);
+            //insert html
+            insertHtmlAfterCursor(htmlData);
+        } catch (IOException ex) {
+//            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void insertHtmlAfterCursor(String html) {
+        //replace invalid chars
+        html = html.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\r", "\\r")
+                .replace("\n", "\\n");
+        //get script
+        String script = String.format(
+                "(function(html) {"
+                        + "  var sel, range;"
+                        + "  if (window.getSelection) {"
+                        + "    sel = window.getSelection();"
+                        + "    if (sel.getRangeAt && sel.rangeCount) {"
+                        + "      range = sel.getRangeAt(0);"
+                        + "      range.deleteContents();"
+                        + "      var el = document.createElement(\"div\");"
+                        + "      el.innerHTML = html;"
+                        + "      var frag = document.createDocumentFragment(),"
+                        + "        node, lastNode;"
+                        + "      while ((node = el.firstChild)) {"
+                        + "        lastNode = frag.appendChild(node);"
+                        + "      }"
+                        + "      range.insertNode(frag);"
+                        + "      if (lastNode) {"
+                        + "        range = range.cloneRange();"
+                        + "        range.setStartAfter(lastNode);"
+                        + "        range.collapse(true);"
+                        + "        sel.removeAllRanges();"
+                        + "        sel.addRange(range);"
+                        + "      }"
+                        + "    }"
+                        + "  }"
+                        + "  else if (document.selection && "
+                        + "           document.selection.type != \"Control\") {"
+                        + "    document.selection.createRange().pasteHTML(html);"
+                        + "  }"
+                        + "})(\"%s\");", html);
+        //execute script
+        WebView mWebView = (WebView) htmlEditor.lookup( ".web-view");
+        mWebView.getEngine().executeScript(script);
     }
 }
