@@ -1,0 +1,51 @@
+#menuAdd > .label{
+    -fx-graphic: url(/images/add_black_24dp.png);
+}
+#menuAdd .accelerator-text{
+    -fx-graphic: none;
+}
+#menuExport > .label{
+    -fx-graphic: url(/images/export_black_24dp.png);
+}
+#menuExport .accelerator-text{
+    -fx-graphic: none;
+}
+#menuRemove > .label{
+    -fx-graphic: url(/images/remove_black_24dp.png);
+}
+#menuRemove .accelerator-text{
+    -fx-graphic: none;
+}
+#menuDark > .label{
+    -fx-graphic: url(/images/dark_mode_black_24dp.png);
+}
+#menuDark .accelerator-text{
+    -fx-graphic: none;
+}
+#menuLight > .label{
+    -fx-graphic: url(/images/light_mode_black_24dp.png);
+}
+#menuLight .accelerator-text{
+    -fx-graphic: none;
+}
+#menuAbout > .label{
+    -fx-graphic: url(/images/info_black_24dp.png);
+}
+#menuAbout .accelerator-text{
+    -fx-graphic: none;
+}
+#addBtn{
+    -fx-graphic: url(/images/add_black_24dp.png);
+}
+#removeBtn{
+    -fx-graphic: url(/images/remove_black_24dp.png);
+}
+#subjectBtn{
+    -fx-graphic: url(/images/subject_add_black_24dp.png);
+}
+#clearBtn{
+    -fx-graphic: url(/images/clear_black_24dp.png);
+}
+#searchBtn{
+    -fx-graphic: url(/images/search_black_24dp.png);
+}
