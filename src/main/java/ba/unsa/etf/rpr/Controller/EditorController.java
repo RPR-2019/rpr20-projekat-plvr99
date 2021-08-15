@@ -44,6 +44,7 @@ public class EditorController {
     private Korisnik korisnik;
     private String pocetniText;
     private Button mImportFileButton;
+    private ResourceBundle rb;
 
     public EditorController(Korisnik korisnik,Biljeska biljeska) {
         this.biljeska = biljeska;
@@ -60,11 +61,7 @@ public class EditorController {
 
     @FXML
     public void initialize(){
-//        ((ToolBar) htmlEditor.lookup(".bottom-toolbar")).getItems().addAll(
-//                FXCollections.observableArrayList(((ToolBar)htmlEditor.lookup(".top-toolbar")).getItems()));
-//        htmlEditor.lookup(".top-toolbar").setDisable(true);
-//        htmlEditor.lookup(".top-toolbar").setManaged(false);
-
+        rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
         htmlEditor.setVisible(false);
         Platform.runLater(new Runnable() {
             @Override
@@ -101,7 +98,7 @@ public class EditorController {
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.getIcons().add(new Image("/images/app_icon.png"));
-        stage.setTitle("Notes");
+        stage.setTitle("E-Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
         JMetro jMetro = new JMetro(Main.getTheme());
@@ -113,7 +110,6 @@ public class EditorController {
         if(!pocetniText.equals(htmlEditor.getHtmlText())) {
             JMetro jMetro = new JMetro(Main.getTheme());
             FlatAlert alert = new FlatAlert(FlatAlert.AlertType.CONFIRMATION);
-            ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
             alert.setTitle(rb.getString("closeWSaving"));
             alert.setHeaderText(rb.getString("closeWSaving1"));
             alert.setContentText(null);
@@ -137,13 +133,15 @@ public class EditorController {
                 close(new ActionEvent());
             } else {
                 event.consume();
+                close(new ActionEvent());
+                // TODO: 16.8.2021 fixati close
             }
         }
     }
 
     public void exportBiljeska(ActionEvent actionEvent) throws IOException {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Browse");
+        fileChooser.setTitle(rb.getString("browse"));
         Stage stage = new Stage();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File ", "*.pdf"));
         File selectedFile = fileChooser.showSaveDialog(stage);
@@ -170,7 +168,7 @@ public class EditorController {
         ImageView graphic = new ImageView(new Image(
                 getClass().getResourceAsStream("/images/add_grey_24dp.png")));
         mImportFileButton = new Button("",graphic);
-        mImportFileButton.setTooltip(new Tooltip("Import File"));
+        mImportFileButton.setTooltip(new Tooltip(rb.getString("insertImage")));
         mImportFileButton.setOnAction((event) -> onImportFileButtonAction());
 
         //add to top toolbar
@@ -180,8 +178,10 @@ public class EditorController {
 
     private void onImportFileButtonAction() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select a file to import");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All Files", "*.*"));
+        fileChooser.setTitle(rb.getString("browse"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPG file", "*.jpg"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG file", "*.png"));
+//        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showOpenDialog(htmlEditor.getScene().getWindow());
         if (selectedFile != null) {
             importDataFile(selectedFile);

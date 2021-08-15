@@ -16,6 +16,9 @@ import jfxtras.styles.jmetro.FlatAlert;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class PredmetController {
     public TextField nameFld;
     public Button addBtn;
@@ -43,17 +46,19 @@ public class PredmetController {
 
     public void addPredmet(ActionEvent actionEvent){
         // TODO: 16.7.2021 dodati translations text
+        Locale locale;
+        ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
        if(biljeskeModel.predmetUBaziCheck(nameFld.getText())){
-            messageText.setText("Subject with that name already exists");
+            messageText.setText(rb.getString("subjectError"));
             messageText.setFill(Paint.valueOf("red"));
             messageText.setVisible(true);
        }else{
            biljeskeModel.predmetInsert(nameFld.getText());
            JMetro jMetro = new JMetro(Main.getTheme());
            FlatAlert alert = new FlatAlert(FlatAlert.AlertType.INFORMATION);
-           alert.setTitle("Succes");
+           alert.setTitle(rb.getString("signUpSuccess"));
            alert.setHeaderText(null);
-           alert.setContentText("Succesfully added subject!");
+           alert.setContentText(rb.getString("subjectSucces"));
            jMetro.setScene(alert.getDialogPane().getScene());
            alert.showAndWait();
        }

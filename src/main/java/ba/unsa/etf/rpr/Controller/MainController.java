@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
@@ -21,6 +22,7 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
@@ -30,12 +32,13 @@ public class MainController {
     public TextField usernameFld;
     public PasswordField passwordFld;
     public Label errorLabel;
+    public ImageView logoImgView;
     public Model model = new Model();
     @FXML
     public void initialize() {
         errorLabel.setVisible(false);
         grid.getStyleClass().add(JMetroStyleClass.BACKGROUND);
-
+        logoImgView.setImage(new Image("/images/logo_main.png"));
     }
 
     public void closeApp(ActionEvent actionEvent){
@@ -55,7 +58,7 @@ public class MainController {
 
             Parent root = loader.load();
             stage.getIcons().add(new Image("/images/app_icon.png"));
-            stage.setTitle("Notes");
+            stage.setTitle("E-Notes");
            // stage.initModality(Modality.APPLICATION_MODAL);
             Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
             JMetro jMetro = new JMetro(Main.getTheme());
@@ -90,7 +93,9 @@ public class MainController {
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.getIcons().add(new Image("/images/app_icon.png"));
-        stage.setTitle("Notes");
+        Locale locale;
+        ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
+        stage.setTitle(rb.getString("signUpTitle"));
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
         JMetro jMetro = new JMetro(Main.getTheme());

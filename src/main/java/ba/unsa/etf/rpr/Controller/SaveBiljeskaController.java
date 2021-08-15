@@ -10,7 +10,9 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class SaveBiljeskaController {
     private static BiljeskeModel biljeskeModel;
@@ -35,10 +37,12 @@ public class SaveBiljeskaController {
 
     public void saveBiljeska(ActionEvent actionEvent){
         if(biljeskeModel.biljeskaUBaziCheck(nameFld.getText())){
+            Locale locale;
+            ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Overwrite ");
-            alert.setHeaderText("A note with the same name already exists");
-            alert.setContentText("Are you sure you want to overwrite the existing note?");
+            alert.setTitle(rb.getString("overwrite"));
+            alert.setHeaderText(rb.getString("noteWSameName"));
+            alert.setContentText(rb.getString("noteWSameName1"));
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK){
                  biljeskeModel.updateBiljeska(nameFld.getText(), text);

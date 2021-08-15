@@ -121,7 +121,7 @@ public class SveBiljeskeController {
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.getIcons().add(new Image("/images/app_icon.png"));
-        stage.setTitle("Notes");
+        stage.setTitle("E-Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
         JMetro jMetro = new JMetro(Main.getTheme());
@@ -146,7 +146,8 @@ public class SveBiljeskeController {
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.getIcons().add(new Image("/images/app_icon.png"));
-        stage.setTitle("Notes");
+        ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
+        stage.setTitle(rb.getString("subjectNew"));
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
         JMetro jMetro = new JMetro(Main.getTheme());
@@ -258,6 +259,7 @@ public class SveBiljeskeController {
         ((Stage) tableViewBiljeske.getScene().getWindow()).close();
         jMetro.setScene(scene);
         stage.setScene(scene);
+        stage.setTitle("E-Notes");
         stage.getIcons().add(new Image("/images/app_icon.png"));
         //stage.initStyle(StageStyle.TRANSPARENT);
         stage.setResizable(false);
@@ -274,7 +276,9 @@ public class SveBiljeskeController {
         jMetro.setScene(scene);
         stage.setScene(scene);
         stage.getIcons().add(new Image("/images/app_icon.png"));
-        stage.setTitle("Notes");
+        Locale locale;
+        ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
+        stage.setTitle(rb.getString("aboutTitle"));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.show();
