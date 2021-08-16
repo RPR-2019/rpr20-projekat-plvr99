@@ -2,34 +2,47 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.*?>
 <BorderPane fx:id="borderPane" prefHeight="482.0" prefWidth="773.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu text="_File">
             <items>
-                <MenuItem fx:id="menuAdd" mnemonicParsing="false" onAction="#addBiljeska" styleClass="addIcon" text="Add..." />
-                <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#exportBiljeska" text="Export as PDF..." />
-                <MenuItem mnemonicParsing="false" onAction="#signOut" text="SignOut" />
+                <MenuItem fx:id="menuAdd" mnemonicParsing="false" onAction="#addBiljeska" styleClass="addIcon" text="%addMenuItem">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#exportBiljeska" text="%exportMenuItem">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#signOut" text="%signOutMenuItem">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
+              <MenuItem mnemonicParsing="false" onAction="#exit" text="%exitMenuItem" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
+          <Menu text="_Edit">
             <items>
-              <MenuItem fx:id="menuRemove" mnemonicParsing="false" onAction="#removeBiljeska" text="Remove Selected " />
+              <MenuItem fx:id="menuRemove" mnemonicParsing="false" onAction="#removeBiljeska" text="%removeSelectedMenuItem">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="DELETE" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
+                     </accelerator></MenuItem>
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="View">
+            <Menu text="_View">
                <items>
-                  <Menu mnemonicParsing="false" text="Language">
+                  <Menu mnemonicParsing="false" text="%langMenuItem">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#languageChange" text="English" />
                         <MenuItem mnemonicParsing="false" onAction="#languageChange" text="Bosanski" />
                     </items>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Theme">
+                  <Menu mnemonicParsing="false" text="%themeMenuItem">
                      <items>
                         <MenuItem fx:id="menuLight" mnemonicParsing="false" onAction="#themeChange" text="Light" />
                         <MenuItem fx:id="menuDark" mnemonicParsing="false" onAction="#themeChange" text="Dark" />
@@ -37,9 +50,9 @@
                   </Menu>
                </items>
             </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu text="_Help">
             <items>
-              <MenuItem fx:id="menuAbout" mnemonicParsing="false" onAction="#openAbout" text="About" />
+              <MenuItem fx:id="menuAbout" mnemonicParsing="false" onAction="#openAbout" text="%about" />
             </items>
           </Menu>
         </menus>
