@@ -4,6 +4,12 @@
 #menuAdd .accelerator-text{
     -fx-graphic: none;
 }
+#menuSaveAs > .label{
+    -fx-graphic: url(/images/save_black_24dp.png);
+}
+#menuSaveAs .accelerator-text{
+    -fx-graphic: none;
+}
 #menuExport > .label{
     -fx-graphic: url(/images/export_black_24dp.png);
 }

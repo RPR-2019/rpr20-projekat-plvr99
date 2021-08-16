@@ -124,6 +124,7 @@ public class SveBiljeskeController {
         stage.setTitle("E-Notes");
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+        iconsChange(scene);
         JMetro jMetro = new JMetro(Main.getTheme());
         jMetro.setScene(scene);
         stage.setScene(scene);
@@ -229,14 +230,7 @@ public class SveBiljeskeController {
         loader.setController(new SveBiljeskeController(korisnik));
         try {
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().clear();
-            if (Main.getTheme().equals(Style.DARK)) {
-                scene.getStylesheets().
-                        add(getClass().getResource("/css/iconsWhite.css").toExternalForm());
-            } else {
-                scene.getStylesheets().
-                        add(getClass().getResource("/css/iconsBlack.css").toExternalForm());
-            }
+            iconsChange(scene);
             JMetro jMetro = new JMetro(Main.getTheme());
             jMetro.setScene(scene);
             stage.setScene(scene);
@@ -282,5 +276,15 @@ public class SveBiljeskeController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.show();
+    }
+    private void iconsChange(Scene scene){
+        scene.getStylesheets().clear();
+        if (Main.getTheme().equals(Style.DARK)) {
+            scene.getStylesheets().
+                    add(getClass().getResource("/css/iconsWhite.css").toExternalForm());
+        } else {
+            scene.getStylesheets().
+                    add(getClass().getResource("/css/iconsBlack.css").toExternalForm());
+        }
     }
 }

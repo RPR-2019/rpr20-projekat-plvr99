@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class Main extends Application {
-    public static Style theme = Style.DARK;
+    public static Style theme = Style.LIGHT;
 
     public static Style getTheme() {
         return theme;
@@ -38,6 +38,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
        // primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setResizable(false);
+        primaryStage.setTitle("E-Notes");
         primaryStage.show();
     }
 
