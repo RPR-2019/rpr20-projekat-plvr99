@@ -51,6 +51,7 @@ public class SveBiljeskeController {
     public HBox hBox;
     public BorderPane borderPane;
     public MenuItem menuRemove;
+    public MenuItem menuExport;
     public Button removeBtn;
     private static BiljeskeModel biljeskeModel;
 
@@ -106,10 +107,11 @@ public class SveBiljeskeController {
 
         menuRemove.setDisable(true);
         removeBtn.setDisable(true);
+        menuExport.setDisable(true);
         tableViewBiljeske.getSelectionModel().selectedItemProperty().addListener(((observableValue, biljeska, selection) -> {
-            // TODO: 30.7.2021 isto i za export menu
             menuRemove.setDisable(selection == null);
             removeBtn.setDisable(selection == null);
+            menuExport.setDisable(selection == null);
         }));
     }
     public void openBiljeska(Biljeska biljeska) throws IOException {

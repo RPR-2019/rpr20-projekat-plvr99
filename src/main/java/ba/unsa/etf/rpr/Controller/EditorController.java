@@ -115,7 +115,7 @@ public class EditorController {
             alert.setContentText(null);
             ButtonType buttonTypeOne = new ButtonType(rb.getString("save"));
             ButtonType buttonTypeTwo = new ButtonType(rb.getString("dontSave"));
-            ButtonType buttonTypeCancel = new ButtonType(rb.getString("cancel"));
+            ButtonType buttonTypeCancel = new ButtonType(rb.getString("cancel"), ButtonBar.ButtonData.CANCEL_CLOSE);
 
             alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
             jMetro.setScene(alert.getDialogPane().getScene());
@@ -133,8 +133,6 @@ public class EditorController {
                 close(new ActionEvent());
             } else {
                 event.consume();
-                close(new ActionEvent());
-                // TODO: 16.8.2021 fixati close
             }
         }
     }

@@ -45,8 +45,6 @@ public class PredmetController {
     }
 
     public void addPredmet(ActionEvent actionEvent){
-        // TODO: 16.7.2021 dodati translations text
-        Locale locale;
         ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
        if(biljeskeModel.predmetUBaziCheck(nameFld.getText())){
             messageText.setText(rb.getString("subjectError"));
