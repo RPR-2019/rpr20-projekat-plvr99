@@ -35,7 +35,7 @@ public class SaveNoteController {
         nameFld.textProperty().addListener((observableValue, s, t1) -> saveBtn.setDisable(t1.isBlank()));
     }
 
-    public void saveBiljeska(ActionEvent actionEvent){
+    public void saveNote(ActionEvent actionEvent){
         if(notesModel.noteInDBCheck(nameFld.getText())){
             Locale locale;
             ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());

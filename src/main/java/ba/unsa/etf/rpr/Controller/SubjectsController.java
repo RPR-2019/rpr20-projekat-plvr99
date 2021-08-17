@@ -44,7 +44,7 @@ public class SubjectsController {
         }));
     }
 
-    public void addPredmet(ActionEvent actionEvent){
+    public void addSubject(ActionEvent actionEvent){
         ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
        if(notesModel.subjectInDBCheck(nameFld.getText())){
             messageText.setText(rb.getString("subjectError"));

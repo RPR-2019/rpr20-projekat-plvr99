@@ -95,7 +95,7 @@ public class AllNotesController {
         tableViewNotes.setOnKeyPressed(event->{
             if(tableViewNotes.isFocused() && event.getCode().equals(KeyCode.ENTER) && (tableViewNotes.getSelectionModel().getSelectedItem() != null)){
                 try {
-                    openBiljeska(tableViewNotes.getSelectionModel().getSelectedItem());
+                    openNote(tableViewNotes.getSelectionModel().getSelectedItem());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -106,7 +106,7 @@ public class AllNotesController {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     try {
-                        openBiljeska(row.getItem());
+                        openNote(row.getItem());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -124,7 +124,7 @@ public class AllNotesController {
             menuExport.setDisable(selection == null);
         }));
     }
-    public void openBiljeska(Note note) throws IOException {
+    public void openNote(Note note) throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editor.fxml"), ResourceBundle.getBundle("Translation"));
         EditorController ctrl ;
@@ -148,8 +148,8 @@ public class AllNotesController {
         });
     }
 
-    public void addBiljeska(ActionEvent actionEvent) throws IOException {
-        openBiljeska(null);
+    public void addNote(ActionEvent actionEvent) throws IOException {
+        openNote(null);
     }
 
     public void subjectOpen(ActionEvent actionEvent) throws IOException {
@@ -169,7 +169,7 @@ public class AllNotesController {
         stage.show();
     }
 
-    public void searchBiljeske(ActionEvent actionEvent){
+    public void searchNotes(ActionEvent actionEvent){
         String name= nameFld.getText().isBlank() ? null : nameFld.getText();
         Subject subject = subjectChoiceBox.getValue()==null ? null : subjectChoiceBox.getValue();
         String date = datePicker.getEditor().getText().isBlank() ? null : datePicker.getEditor().getText();
@@ -198,19 +198,19 @@ public class AllNotesController {
         favoriteCheckBox.setSelected(false);
     }
 
-    public void removeBiljeska(ActionEvent actionEvent){
+    public void removeNote(ActionEvent actionEvent){
         notesModel.noteRemove(tableViewNotes.getSelectionModel().getSelectedItem());
         tableViewNotes.refresh();
     }
 
-    public void exportBiljeska(ActionEvent actionEvent) throws IOException {
-        new EditorController(user, tableViewNotes.getSelectionModel().getSelectedItem()).exportBiljeska(actionEvent);
+    public void exportNote(ActionEvent actionEvent) throws IOException {
+        new EditorController(user, tableViewNotes.getSelectionModel().getSelectedItem()).exportNote(actionEvent);
     }
 
     public void languageChange(ActionEvent actionEvent){
         MenuItem item = (MenuItem)actionEvent.getSource();
         String language = item.getText();
-        promjenaJezikaIliTeme(language);
+        changeThemeOrLanguage(language);
     }
 
     public void themeChange(ActionEvent actionEvent) {
@@ -218,10 +218,10 @@ public class AllNotesController {
         String theme = item.getText();
         if (theme.equals("Light") && Main.getTheme().equals(Style.LIGHT)) return;
         if (theme.equals("Dark") && Main.getTheme().equals(Style.DARK)) return;
-        promjenaJezikaIliTeme(theme);
+        changeThemeOrLanguage(theme);
     }
 
-    private void promjenaJezikaIliTeme(String promjena){
+    private void changeThemeOrLanguage(String promjena){
         notesModel.clearNotes();
         notesModel.clearSubjects();
         Stage stage = (Stage) tableViewNotes.getScene().getWindow();
@@ -255,6 +255,7 @@ public class AllNotesController {
         Platform.exit();
     }
     public void signOut(ActionEvent actionEvent) throws IOException {
+        notesModel.removeInstance();
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/logIn.fxml"), ResourceBundle.getBundle("Translation"));
         LogInController ctrl = new LogInController();

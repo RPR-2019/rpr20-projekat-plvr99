@@ -28,6 +28,9 @@ public class NotesModel {
         if (instance == null) instance = new NotesModel(user);
         return instance;
     }
+    public void removeInstance(){
+        instance = null;
+    }
     public void fillModelWData(){
         subjects.clear();
         notes.clear();

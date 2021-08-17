@@ -10,11 +10,11 @@
         <menus>
           <Menu text="_File">
             <items>
-                <MenuItem fx:id="menuAdd" mnemonicParsing="false" onAction="#addBiljeska" styleClass="addIcon" text="%addMenuItem">
+                <MenuItem fx:id="menuAdd" mnemonicParsing="false" onAction="#addNote" styleClass="addIcon" text="%addMenuItem">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
-                <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#exportBiljeska" text="%exportMenuItem">
+                <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#exportNote" text="%exportMenuItem">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
@@ -28,7 +28,7 @@
           </Menu>
           <Menu text="_Edit">
             <items>
-              <MenuItem fx:id="menuRemove" mnemonicParsing="false" onAction="#removeBiljeska" text="%removeSelectedMenuItem">
+              <MenuItem fx:id="menuRemove" mnemonicParsing="false" onAction="#removeNote" text="%removeSelectedMenuItem">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="DELETE" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
                      </accelerator></MenuItem>
@@ -140,7 +140,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin></CheckBox>
             <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="5" />
-            <Button fx:id="searchBtn" mnemonicParsing="false" onAction="#searchBiljeske" text="%search" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="6">
+            <Button fx:id="searchBtn" mnemonicParsing="false" onAction="#searchNotes" text="%search" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin></Button>
@@ -157,11 +157,11 @@
    <right>
       <VBox fx:id="vBox" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="addBtn" maxWidth="-Infinity" minWidth="95.0" mnemonicParsing="false" onAction="#addBiljeska" prefWidth="95.0" text="%add" wrapText="true">
+            <Button fx:id="addBtn" maxWidth="-Infinity" minWidth="95.0" mnemonicParsing="false" onAction="#addNote" prefWidth="95.0" text="%add" wrapText="true">
                <VBox.margin>
                   <Insets />
                </VBox.margin></Button>
-            <Button fx:id="removeBtn" maxWidth="-Infinity" minWidth="95.0" mnemonicParsing="false" onAction="#removeBiljeska" prefWidth="95.0" text="%remove" />
+            <Button fx:id="removeBtn" maxWidth="-Infinity" minWidth="95.0" mnemonicParsing="false" onAction="#removeNote" prefWidth="95.0" text="%remove" />
             <Button fx:id="subjectBtn" maxWidth="95.0" minWidth="95.0" mnemonicParsing="false" onAction="#subjectOpen" prefWidth="95.0" text="%addSubject" wrapText="true" />
          </children>
          <padding>

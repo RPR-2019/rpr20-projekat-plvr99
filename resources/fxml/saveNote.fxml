@@ -38,7 +38,7 @@
          </GridPane.margin></ChoiceBox>
       <ButtonBar prefHeight="40.0" prefWidth="363.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
         <buttons>
-          <Button fx:id="saveBtn" defaultButton="true" mnemonicParsing="false" onAction="#saveBiljeska" text="%save" />
+          <Button fx:id="saveBtn" defaultButton="true" mnemonicParsing="false" onAction="#saveNote" text="%save" />
             <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#close" text="%cancel" />
         </buttons>
          <GridPane.margin>

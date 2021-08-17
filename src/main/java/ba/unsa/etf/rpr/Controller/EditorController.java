@@ -74,13 +74,13 @@ public class EditorController {
         });
     }
 
-    public void saveBiljeska(ActionEvent actionEvent) throws IOException {
-        if(note == null) saveAsBiljeska(actionEvent);
+    public void saveNote(ActionEvent actionEvent) throws IOException {
+        if(note == null) saveAsNote(actionEvent);
         else notesModel.updateNote(note.getNaziv(), htmlEditor.getHtmlText());
         beginText = htmlEditor.getHtmlText();
     }
 
-    public void saveAsBiljeska(ActionEvent actionEvent) throws IOException {
+    public void saveAsNote(ActionEvent actionEvent) throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/saveNote.fxml"), ResourceBundle.getBundle("Translation"));
         SaveNoteController ctrl = new SaveNoteController(user, htmlEditor.getHtmlText());
@@ -112,7 +112,7 @@ public class EditorController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == buttonTypeOne){
                 try {
-                    saveBiljeska(new ActionEvent());
+                    saveNote(new ActionEvent());
                     close(new ActionEvent());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -145,7 +145,7 @@ public class EditorController {
         stage.show();
     }
 
-    public void exportBiljeska(ActionEvent actionEvent) {
+    public void exportNote(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(rb.getString("browse"));
         Stage stage = new Stage();

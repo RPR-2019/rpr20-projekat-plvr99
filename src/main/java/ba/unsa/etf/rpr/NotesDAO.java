@@ -28,7 +28,7 @@ public class NotesDAO {
     private void renewDatabase() {
         Scanner input = null;
         try {
-            input = new Scanner(new FileInputStream("biljeske_db.sql"));
+            input = new Scanner(new FileInputStream("dump.sql"));
             String sqlQuery = "";
             while (input.hasNext()) {
                 sqlQuery += input.nextLine();
