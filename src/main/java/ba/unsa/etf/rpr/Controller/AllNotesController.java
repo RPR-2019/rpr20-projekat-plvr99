@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -91,6 +92,15 @@ public class AllNotesController {
                             });
                     return checkBox.selectedProperty();
                 });
+        tableViewNotes.setOnKeyPressed(event->{
+            if(tableViewNotes.isFocused() && event.getCode().equals(KeyCode.ENTER) && (tableViewNotes.getSelectionModel().getSelectedItem() != null)){
+                try {
+                    openBiljeska(tableViewNotes.getSelectionModel().getSelectedItem());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         tableViewNotes.setRowFactory(tw->{
             TableRow<Note> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
