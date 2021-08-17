@@ -1,7 +1,7 @@
 package ba.unsa.etf.rpr.Controller;
 
 import ba.unsa.etf.rpr.Main;
-import ba.unsa.etf.rpr.Models.Model;
+import ba.unsa.etf.rpr.Models.UserModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,13 +27,13 @@ import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
-public class MainController {
+public class LogInController {
     public GridPane grid;
     public TextField usernameFld;
     public PasswordField passwordFld;
     public Label errorLabel;
     public ImageView logoImgView;
-    public Model model = new Model();
+    public UserModel userModel = new UserModel();
     @FXML
     public void initialize() {
         errorLabel.setVisible(false);
@@ -47,13 +47,13 @@ public class MainController {
     }
 
     public void login(ActionEvent actionEvent) throws IOException {
-        if(model.korisnikProvjera(usernameFld.getText(), passwordFld.getText())) {
+        if(userModel.userCheck(usernameFld.getText(), passwordFld.getText())) {
             errorLabel.setVisible(false);
             usernameFld.setStyle("");
             passwordFld.setStyle("");
             Stage stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sveBiljeske.fxml"), ResourceBundle.getBundle("Translation"));
-            SveBiljeskeController ctrl = new SveBiljeskeController(model.getkorisnik(usernameFld.getText()));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/allNotes.fxml"), ResourceBundle.getBundle("Translation"));
+            AllNotesController ctrl = new AllNotesController(userModel.getUser(usernameFld.getText()));
             loader.setController(ctrl);
 
             Parent root = loader.load();

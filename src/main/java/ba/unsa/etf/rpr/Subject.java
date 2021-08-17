@@ -1,10 +1,10 @@
 package ba.unsa.etf.rpr;
 
-public class Predmet {
+public class Subject {
     private int id;
     private String naziv;
 
-    public Predmet(int id, String naziv) {
+    public Subject(int id, String naziv) {
         this.id = id;
         this.naziv = naziv;
     }

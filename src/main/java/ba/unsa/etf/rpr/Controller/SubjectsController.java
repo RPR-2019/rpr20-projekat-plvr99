@@ -1,8 +1,8 @@
 package ba.unsa.etf.rpr.Controller;
 
-import ba.unsa.etf.rpr.Korisnik;
 import ba.unsa.etf.rpr.Main;
-import ba.unsa.etf.rpr.Models.BiljeskeModel;
+import ba.unsa.etf.rpr.Models.NotesModel;
+import ba.unsa.etf.rpr.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -19,15 +19,15 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class PredmetController {
+public class SubjectsController {
     public TextField nameFld;
     public Button addBtn;
     public Text messageText;
     public GridPane grid;
-    private static BiljeskeModel biljeskeModel;
+    private static NotesModel notesModel;
 
-    public PredmetController(Korisnik korisnik) {
-        biljeskeModel = BiljeskeModel.getModelInstance(korisnik);
+    public SubjectsController(User user) {
+        notesModel = NotesModel.getModelInstance(user);
     }
 
     @FXML
@@ -46,12 +46,12 @@ public class PredmetController {
 
     public void addPredmet(ActionEvent actionEvent){
         ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
-       if(biljeskeModel.predmetUBaziCheck(nameFld.getText())){
+       if(notesModel.subjectInDBCheck(nameFld.getText())){
             messageText.setText(rb.getString("subjectError"));
             messageText.setFill(Paint.valueOf("red"));
             messageText.setVisible(true);
        }else{
-           biljeskeModel.predmetInsert(nameFld.getText());
+           notesModel.subjectInsert(nameFld.getText());
            JMetro jMetro = new JMetro(Main.getTheme());
            FlatAlert alert = new FlatAlert(FlatAlert.AlertType.INFORMATION);
            alert.setTitle(rb.getString("signUpSuccess"));

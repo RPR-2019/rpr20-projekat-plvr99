@@ -1,6 +1,6 @@
 package ba.unsa.etf.rpr.Controller;
 
-import ba.unsa.etf.rpr.Models.Model;
+import ba.unsa.etf.rpr.Models.UserModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -19,7 +19,7 @@ public class SignUpController {
     public PasswordField passwordFld;
     public PasswordField passwordFld2;
     public Label messageLabel;
-    private Model model = new Model();
+    private UserModel userModel = new UserModel();
     @FXML
     public void initialize(){
         messageLabel.setVisible(false);
@@ -33,7 +33,7 @@ public class SignUpController {
             messageLabel.setTextFill(Paint.valueOf("red"));
             messageLabel.setVisible(true);
         }
-        else if(model.usernameCheck(usernameFld.getText())){
+        else if(userModel.usernameCheck(usernameFld.getText())){
             messageLabel.setText(resourceBundle.getString("signUpMessage2"));
             messageLabel.setTextFill(Paint.valueOf("red"));
             messageLabel.setVisible(true);
@@ -49,7 +49,7 @@ public class SignUpController {
             messageLabel.setVisible(true);
         }
         else{
-            model.korisnikInsert(usernameFld.getText(), passwordFld.getText(), nameFld.getText(), lastNameFld.getText());
+            userModel.userInsert(usernameFld.getText(), passwordFld.getText(), nameFld.getText(), lastNameFld.getText());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(resourceBundle.getString("signUpSuccess"));
             alert.setHeaderText(null);

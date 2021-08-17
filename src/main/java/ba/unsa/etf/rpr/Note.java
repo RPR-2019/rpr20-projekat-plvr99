@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Biljeska {
+public class Note {
     private int id;
     private int predmetId;
     private int korisnikId;
@@ -15,7 +15,7 @@ public class Biljeska {
     private SimpleStringProperty lastModified;
     private boolean favorite;
 
-    public Biljeska(int id, int predmetId, int korisnikId, String naziv, String text) {
+    public Note(int id, int predmetId, int korisnikId, String naziv, String text) {
         this.id = id;
         this.predmetId = predmetId;
         this.korisnikId = korisnikId;
@@ -27,7 +27,7 @@ public class Biljeska {
         favorite = false;
     }
 
-    public Biljeska(int id, int predmetId, int korisnikId, String naziv, String text, String dateCreated, String lastModified, boolean favorite) {
+    public Note(int id, int predmetId, int korisnikId, String naziv, String text, String dateCreated, String lastModified, boolean favorite) {
         this.id = id;
         this.predmetId = predmetId;
         this.korisnikId = korisnikId;

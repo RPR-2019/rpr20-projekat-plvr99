@@ -1,11 +1,11 @@
 package ba.unsa.etf.rpr.Controller;
 
 
-import ba.unsa.etf.rpr.Biljeska;
-import ba.unsa.etf.rpr.Korisnik;
 import ba.unsa.etf.rpr.Main;
-import ba.unsa.etf.rpr.Models.BiljeskeModel;
-import ba.unsa.etf.rpr.Predmet;
+import ba.unsa.etf.rpr.Models.NotesModel;
+import ba.unsa.etf.rpr.Note;
+import ba.unsa.etf.rpr.Subject;
+import ba.unsa.etf.rpr.User;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
@@ -34,15 +34,15 @@ import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
-public class SveBiljeskeController {
-    private Korisnik korisnik;
-    public TableView<Biljeska> tableViewBiljeske;
-    public TableColumn<Biljeska, String> colNaziv;
-    public TableColumn<Biljeska, String> colDateCreated;
-    public TableColumn<Biljeska, String> colLastModified;
-    public TableColumn<Biljeska, Boolean> colFavorite;
+public class AllNotesController {
+    private User user;
+    public TableView<Note> tableViewNotes;
+    public TableColumn<Note, String> colNaziv;
+    public TableColumn<Note, String> colDateCreated;
+    public TableColumn<Note, String> colLastModified;
+    public TableColumn<Note, Boolean> colFavorite;
     public TextField nameFld;
-    public ChoiceBox<Predmet> predmetChoiceBox;
+    public ChoiceBox<Subject> subjectChoiceBox;
     public DatePicker datePicker;
     public Label loadingLabel;
     public CheckBox favoriteCheckBox;
@@ -53,11 +53,11 @@ public class SveBiljeskeController {
     public MenuItem menuRemove;
     public MenuItem menuExport;
     public Button removeBtn;
-    private static BiljeskeModel biljeskeModel;
+    private static NotesModel notesModel;
 
-    public SveBiljeskeController(Korisnik korisnik) {
-        this.korisnik = korisnik;
-        biljeskeModel = BiljeskeModel.getModelInstance(korisnik);
+    public AllNotesController(User user) {
+        this.user = user;
+        notesModel = NotesModel.getModelInstance(user);
     }
 
     @FXML
@@ -67,12 +67,12 @@ public class SveBiljeskeController {
         vBox.getStyleClass().add(JMetroStyleClass.BACKGROUND);
         hBox.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 
-        biljeskeModel.napuniModelPodacima();
-        ObservableList<Biljeska> biljeske= biljeskeModel.getBiljeske();
-        predmetChoiceBox.setItems(biljeskeModel.getPredmeti());
-        tableViewBiljeske.setItems(biljeske);
-        loadingLabel.textProperty().bind(Bindings.size(biljeske).asString());
-        tableViewBiljeske.setEditable(true);
+        notesModel.fillModelWData();
+        ObservableList<Note> notes= notesModel.getNotes();
+        subjectChoiceBox.setItems(notesModel.getSubjects());
+        tableViewNotes.setItems(notes);
+        loadingLabel.textProperty().bind(Bindings.size(notes).asString());
+        tableViewNotes.setEditable(true);
         colNaziv.setCellValueFactory(new PropertyValueFactory<>("naziv"));
         colDateCreated.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
         colLastModified.setCellValueFactory(new PropertyValueFactory<>("lastModified"));
@@ -80,19 +80,19 @@ public class SveBiljeskeController {
         colFavorite.setCellFactory(tc -> new CheckBoxTableCell<>());
         colFavorite.setCellValueFactory(
                 c -> {
-                    Biljeska biljeska = c.getValue();
+                    Note note = c.getValue();
                     CheckBox checkBox = new CheckBox();
-                    checkBox.selectedProperty().setValue(biljeska.isFavorite());
+                    checkBox.selectedProperty().setValue(note.isFavorite());
                     checkBox
                             .selectedProperty()
                             .addListener((ov, old_val, new_val) -> {
-                                biljeska.setFavorite(new_val);
-                                biljeskeModel.updateBiljeskaFavorite(biljeska, new_val);
+                                note.setFavorite(new_val);
+                                notesModel.updateNoteFavorite(note, new_val);
                             });
                     return checkBox.selectedProperty();
                 });
-        tableViewBiljeske.setRowFactory(tw->{
-            TableRow<Biljeska> row = new TableRow<>();
+        tableViewNotes.setRowFactory(tw->{
+            TableRow<Note> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     try {
@@ -108,18 +108,18 @@ public class SveBiljeskeController {
         menuRemove.setDisable(true);
         removeBtn.setDisable(true);
         menuExport.setDisable(true);
-        tableViewBiljeske.getSelectionModel().selectedItemProperty().addListener(((observableValue, biljeska, selection) -> {
+        tableViewNotes.getSelectionModel().selectedItemProperty().addListener(((observableValue, note, selection) -> {
             menuRemove.setDisable(selection == null);
             removeBtn.setDisable(selection == null);
             menuExport.setDisable(selection == null);
         }));
     }
-    public void openBiljeska(Biljeska biljeska) throws IOException {
+    public void openBiljeska(Note note) throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editor.fxml"), ResourceBundle.getBundle("Translation"));
         EditorController ctrl ;
-        if(biljeska == null) ctrl = new EditorController(korisnik);
-        else ctrl = new EditorController(korisnik, biljeska);
+        if(note == null) ctrl = new EditorController(user);
+        else ctrl = new EditorController(user, note);
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.getIcons().add(new Image("/images/app_icon.png"));
@@ -133,8 +133,8 @@ public class SveBiljeskeController {
         stage.show();
         stage.setOnHiding((event) -> {
             clearFilters(new ActionEvent());
-            biljeskeModel.clearBiljeske();
-            biljeskeModel.sveBiljeske();
+            notesModel.clearNotes();
+            notesModel.allNotes();
         });
     }
 
@@ -145,7 +145,7 @@ public class SveBiljeskeController {
     public void subjectOpen(ActionEvent actionEvent) throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/subjects.fxml"), ResourceBundle.getBundle("Translation"));
-        PredmetController ctrl = new PredmetController(korisnik);
+        SubjectsController ctrl = new SubjectsController(user);
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.getIcons().add(new Image("/images/app_icon.png"));
@@ -160,22 +160,22 @@ public class SveBiljeskeController {
     }
 
     public void searchBiljeske(ActionEvent actionEvent){
-        String naziv= nameFld.getText().isBlank() ? null : nameFld.getText();
-        Predmet predmet = predmetChoiceBox.getValue()==null ? null : predmetChoiceBox.getValue();
-        String datum = datePicker.getEditor().getText().isBlank() ? null : datePicker.getEditor().getText();
+        String name= nameFld.getText().isBlank() ? null : nameFld.getText();
+        Subject subject = subjectChoiceBox.getValue()==null ? null : subjectChoiceBox.getValue();
+        String date = datePicker.getEditor().getText().isBlank() ? null : datePicker.getEditor().getText();
         new Thread(()->{
-            if(naziv==null && predmet==null && datum==null && !favoriteCheckBox.isSelected()){
+            if(name==null && subject ==null && date==null && !favoriteCheckBox.isSelected()){
                 Platform.runLater(()->{
-                    biljeskeModel.clearBiljeske();
-                    biljeskeModel.sveBiljeske();
-                    tableViewBiljeske.setItems(biljeskeModel.getBiljeske());
+                    notesModel.clearNotes();
+                    notesModel.allNotes();
+                    tableViewNotes.setItems(notesModel.getNotes());
                 });
             }
             else {
                 Platform.runLater(()->{
-                    biljeskeModel.clearBiljeske();
-                    biljeskeModel.filterBiljeske(naziv,predmet,datum,favoriteCheckBox.isSelected());
-                    tableViewBiljeske.setItems(biljeskeModel.getBiljeske());
+                    notesModel.clearNotes();
+                    notesModel.filterNotes(name, subject,date,favoriteCheckBox.isSelected());
+                    tableViewNotes.setItems(notesModel.getNotes());
                 });
             }
         }).start();
@@ -183,18 +183,18 @@ public class SveBiljeskeController {
 
     public void clearFilters(ActionEvent actionEvent){
         nameFld.clear();
-        predmetChoiceBox.setValue(null);
+        subjectChoiceBox.setValue(null);
         datePicker.getEditor().clear();
         favoriteCheckBox.setSelected(false);
     }
 
     public void removeBiljeska(ActionEvent actionEvent){
-        biljeskeModel.biljeskaRemove(tableViewBiljeske.getSelectionModel().getSelectedItem());
-        tableViewBiljeske.refresh();
+        notesModel.noteRemove(tableViewNotes.getSelectionModel().getSelectedItem());
+        tableViewNotes.refresh();
     }
 
     public void exportBiljeska(ActionEvent actionEvent) throws IOException {
-        new EditorController(korisnik,tableViewBiljeske.getSelectionModel().getSelectedItem()).exportBiljeska(actionEvent);
+        new EditorController(user, tableViewNotes.getSelectionModel().getSelectedItem()).exportBiljeska(actionEvent);
     }
 
     public void languageChange(ActionEvent actionEvent){
@@ -212,9 +212,9 @@ public class SveBiljeskeController {
     }
 
     private void promjenaJezikaIliTeme(String promjena){
-        biljeskeModel.clearBiljeske();
-        biljeskeModel.clearPredmeti();
-        Stage stage = (Stage) tableViewBiljeske.getScene().getWindow();
+        notesModel.clearNotes();
+        notesModel.clearSubjects();
+        Stage stage = (Stage) tableViewNotes.getScene().getWindow();
         stage.getIcons().add(new Image("/images/app_icon.png"));
         switch (promjena) {
             case "Bosanski" -> Locale.setDefault(new Locale("bs", "BA"));
@@ -228,8 +228,8 @@ public class SveBiljeskeController {
             default -> Locale.setDefault(new Locale("bs", "BA"));
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sveBiljeske.fxml"), ResourceBundle.getBundle("Translation"));
-        loader.setController(new SveBiljeskeController(korisnik));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/allNotes.fxml"), ResourceBundle.getBundle("Translation"));
+        loader.setController(new AllNotesController(user));
         try {
             Scene scene = new Scene(loader.load());
             iconsChange(scene);
@@ -246,13 +246,13 @@ public class SveBiljeskeController {
     }
     public void signOut(ActionEvent actionEvent) throws IOException {
         Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sample.fxml"), ResourceBundle.getBundle("Translation"));
-        MainController ctrl = new MainController();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/logIn.fxml"), ResourceBundle.getBundle("Translation"));
+        LogInController ctrl = new LogInController();
         loader.setController(ctrl);
         Parent root = loader.load();
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
         JMetro jMetro = new JMetro(Main.getTheme());
-        ((Stage) tableViewBiljeske.getScene().getWindow()).close();
+        ((Stage) tableViewNotes.getScene().getWindow()).close();
         jMetro.setScene(scene);
         stage.setScene(scene);
         stage.setTitle("E-Notes");

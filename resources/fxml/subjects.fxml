@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
@@ -14,14 +15,29 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="%name" />
-      <TextField fx:id="nameFld" GridPane.columnIndex="1" />
+      <Label text="%name">
+         <GridPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </GridPane.margin></Label>
+      <TextField fx:id="nameFld" GridPane.columnIndex="1">
+         <GridPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </GridPane.margin></TextField>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
         <buttons>
-          <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addPredmet" text="%addSubject" />
-            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#close" text="%cancel" />
+          <Button fx:id="addBtn" defaultButton="true" mnemonicParsing="false" onAction="#addPredmet" text="%addSubject" />
+            <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#close" text="%cancel" />
         </buttons>
+         <GridPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </GridPane.margin>
       </ButtonBar>
-      <Text fx:id="messageText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
+      <Text fx:id="messageText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </GridPane.margin></Text>
    </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
 </GridPane>

@@ -1,6 +1,6 @@
 package ba.unsa.etf.rpr;
 
-import ba.unsa.etf.rpr.Controller.MainController;
+import ba.unsa.etf.rpr.Controller.LogInController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,8 +27,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sample.fxml"), ResourceBundle.getBundle("Translation"));
-        loader.setController(new MainController());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/logIn.fxml"), ResourceBundle.getBundle("Translation"));
+        loader.setController(new LogInController());
         Parent root = loader.load();
         Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
         JMetro jMetro = new JMetro(Main.getTheme());

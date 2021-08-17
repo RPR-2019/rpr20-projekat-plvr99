@@ -73,7 +73,7 @@
       </HBox>
    </bottom>
    <center>
-      <TableView fx:id="tableViewBiljeske" prefHeight="434.0" prefWidth="702.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableViewNotes" prefHeight="434.0" prefWidth="702.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="colNaziv" minWidth="-1.0" prefWidth="99.0" text="%nameCol" />
           <TableColumn fx:id="colDateCreated" minWidth="-1.0" prefWidth="88.0" text="%dateCreatedCol" />
@@ -127,7 +127,7 @@
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin></Label>
-            <ChoiceBox fx:id="predmetChoiceBox" prefHeight="25.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
+            <ChoiceBox fx:id="subjectChoiceBox" prefHeight="25.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin></ChoiceBox>

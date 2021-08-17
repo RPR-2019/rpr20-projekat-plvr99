@@ -1,10 +1,10 @@
 package ba.unsa.etf.rpr.Controller;
 
 
-import ba.unsa.etf.rpr.Biljeska;
-import ba.unsa.etf.rpr.Korisnik;
 import ba.unsa.etf.rpr.Main;
-import ba.unsa.etf.rpr.Models.BiljeskeModel;
+import ba.unsa.etf.rpr.Models.NotesModel;
+import ba.unsa.etf.rpr.Note;
+import ba.unsa.etf.rpr.User;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,8 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
@@ -39,62 +37,53 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 public class EditorController {
     public HTMLEditor htmlEditor;
     public GridPane gridPane;
-    private Biljeska biljeska;
-    private static BiljeskeModel biljeskeModel;
-    private Korisnik korisnik;
-    private String pocetniText;
-    private Button mImportFileButton;
+    private Note note;
+    private static NotesModel notesModel;
+    private User user;
+    private String beginText;
     private ResourceBundle rb;
 
-    public EditorController(Korisnik korisnik,Biljeska biljeska) {
-        this.biljeska = biljeska;
-        this.korisnik = korisnik;
-        biljeskeModel = BiljeskeModel.getModelInstance(korisnik);
-        pocetniText = biljeska.getText();
+    public EditorController(User user, Note note) {
+        this.note = note;
+        this.user = user;
+        notesModel = NotesModel.getModelInstance(user);
+        beginText = note.getText();
     }
 
-    public EditorController(Korisnik korisnik) {
-        this.korisnik = korisnik;
-        this.biljeska = null;
-        pocetniText = "";
+    public EditorController(User user) {
+        this.user = user;
+        this.note = null;
+        beginText = "";
     }
 
     @FXML
     public void initialize(){
         rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
         htmlEditor.setVisible(false);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                createCustomButtons();
-                htmlEditor.setVisible(true);
-            }
+        Platform.runLater(() -> {
+            createCustomButtons();
+            htmlEditor.setVisible(true);
         });
 
-        if(biljeska != null){
-            htmlEditor.setHtmlText(biljeska.getText());
+        if(note != null){
+            htmlEditor.setHtmlText(note.getText());
         }
 
-        htmlEditor.setOnMouseClicked((MouseEvent event) -> {
-            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2){
-                System.out.println(htmlEditor.getHtmlText());
-            }
-        });
         Platform.runLater(()->{
             gridPane.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
         });
     }
 
     public void saveBiljeska(ActionEvent actionEvent) throws IOException {
-        if(biljeska == null) saveAsBiljeska(actionEvent);
-        else biljeskeModel.updateBiljeska(biljeska.getNaziv(), htmlEditor.getHtmlText());
-        pocetniText = htmlEditor.getHtmlText();
+        if(note == null) saveAsBiljeska(actionEvent);
+        else notesModel.updateNote(note.getNaziv(), htmlEditor.getHtmlText());
+        beginText = htmlEditor.getHtmlText();
     }
 
     public void saveAsBiljeska(ActionEvent actionEvent) throws IOException {
         Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/saveBiljeska.fxml"), ResourceBundle.getBundle("Translation"));
-        SaveBiljeskaController ctrl = new SaveBiljeskaController(korisnik, htmlEditor.getHtmlText());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/saveNote.fxml"), ResourceBundle.getBundle("Translation"));
+        SaveNoteController ctrl = new SaveNoteController(user, htmlEditor.getHtmlText());
         loader.setController(ctrl);
         Parent root = loader.load();
         stage.getIcons().add(new Image("/images/app_icon.png"));
@@ -107,7 +96,7 @@ public class EditorController {
         stage.show();
     }
     private void closeWindowEvent(WindowEvent event){
-        if(!pocetniText.equals(htmlEditor.getHtmlText())) {
+        if(!beginText.equals(htmlEditor.getHtmlText())) {
             JMetro jMetro = new JMetro(Main.getTheme());
             FlatAlert alert = new FlatAlert(FlatAlert.AlertType.CONFIRMATION);
             alert.setTitle(rb.getString("closeWSaving"));
@@ -137,20 +126,40 @@ public class EditorController {
         }
     }
 
-    public void exportBiljeska(ActionEvent actionEvent) throws IOException {
+    public void openAbout(ActionEvent actionEvent) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/about.fxml"), ResourceBundle.getBundle("Translation"));
+        AboutController ctrl = new AboutController();
+        loader.setController(ctrl);
+        Parent root = loader.load();
+        Scene scene = new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+        JMetro jMetro = new JMetro(Main.getTheme());
+        jMetro.setScene(scene);
+        stage.setScene(scene);
+        stage.getIcons().add(new Image("/images/app_icon.png"));
+        Locale locale;
+        ResourceBundle rb = ResourceBundle.getBundle("Translation", Locale.getDefault());
+        stage.setTitle(rb.getString("aboutTitle"));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    public void exportBiljeska(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(rb.getString("browse"));
         Stage stage = new Stage();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File ", "*.pdf"));
         File selectedFile = fileChooser.showSaveDialog(stage);
-        String text = htmlEditor == null ? pocetniText : htmlEditor.getHtmlText();
+        String text = htmlEditor == null ? beginText : htmlEditor.getHtmlText();
+        if(selectedFile == null) return;
         if(selectedFile.exists()  && selectedFile.canWrite()) {
-            biljeskeModel.exportFile(selectedFile, text);
+            notesModel.exportFile(selectedFile, text);
         }
         else {
             try {
                 selectedFile.createNewFile();
-                biljeskeModel.exportFile(selectedFile, text);
+                notesModel.exportFile(selectedFile, text);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -165,7 +174,7 @@ public class EditorController {
         //add embed file button
         ImageView graphic = new ImageView(new Image(
                 getClass().getResourceAsStream("/images/add_grey_24dp.png")));
-        mImportFileButton = new Button("",graphic);
+        Button mImportFileButton = new Button("", graphic);
         mImportFileButton.setTooltip(new Tooltip(rb.getString("insertImage")));
         mImportFileButton.setOnAction((event) -> onImportFileButtonAction());
 
@@ -179,7 +188,6 @@ public class EditorController {
         fileChooser.setTitle(rb.getString("browse"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPG file", "*.jpg"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG file", "*.png"));
-//        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showOpenDialog(htmlEditor.getScene().getWindow());
         if (selectedFile != null) {
             importDataFile(selectedFile);

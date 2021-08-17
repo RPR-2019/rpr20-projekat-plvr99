@@ -1,10 +1,10 @@
 package ba.unsa.etf.rpr;
 
-public class Korisnik {
+public class User {
     private int id;
     private String username;
 
-    public Korisnik(int id, String username) {
+    public User(int id, String username) {
         this.id = id;
         this.username = username;
     }
